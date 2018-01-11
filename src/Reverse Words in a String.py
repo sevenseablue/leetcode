@@ -8,4 +8,4 @@ class Solution:
 
 
 solu = Solution()
-print solu.reverseWords(" there are three   spaces.   ")
+print(solu.reverseWords(" there are three   spaces.   "))

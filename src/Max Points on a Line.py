@@ -36,7 +36,7 @@ class Solution:
                 d[angleTmp] = angleCount + 1
             if Max < samePointCount:
                 Max = samePointCount
-            for v in d.values():
+            for v in list(d.values()):
                 if v+samePointCount > Max:
                     Max = v+samePointCount
         return Max
@@ -82,8 +82,8 @@ points.append(Point(0, 5))
 #points = [(1,1),(1,1),(2,2),(2,2)]
 
 solu = SolutionN3()
-print solu.maxPoints(points)
+print(solu.maxPoints(points))
 
 solu = Solution()
-print solu.maxPoints(points)
+print(solu.maxPoints(points))
 

@@ -11,11 +11,11 @@ class Solution:
         length = 0
         while head != None:
             length += 1
-            head = head.next
+            head = head.__next__
         return length
 
     def swap(self, h, t):
-        h.next = t.next
+        h.next = t.__next__
         t.next = h
 
     def mergeTwoList(self, h1, h2,):
@@ -31,10 +31,10 @@ class Solution:
             else:
                 small = h1
                 large = h2
-            while small.next != None and small.next.val <= large.val:
-                small = small.next
+            while small.__next__ != None and small.next.val <= large.val:
+                small = small.__next__
             small.next = large
-            h1 = small.next
+            h1 = small.__next__
             h2 = large
 
         return head
@@ -42,7 +42,7 @@ class Solution:
     def mergeSort(self, head, length, step):
         curHead = head
         h = curHead
-        t = curHead.next
+        t = curHead.__next__
         if h.val > t.val:
             self.swap(h, t)
 
@@ -56,14 +56,14 @@ class Solution:
 solu = Solution()
 
 for i in range(1, 4, 1):
-    print i
+    print(i)
     head = ListNode(i)
     cur = head
     for j in range(1,i):
         cur.next = ListNode(j)
-        cur = cur.next
+        cur = cur.__next__
 
-    print solu.getLength(head)
+    print(solu.getLength(head))
 
 
 

@@ -52,7 +52,7 @@ tokens = [
 ]
 solu = Solution()
 for t in tokens:
-    print solu.evalRPN(t)
+    print((solu.evalRPN(t)))
 
 # 18
 # 3
