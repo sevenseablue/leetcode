@@ -15,6 +15,8 @@
 import re
 import numpy as np
 
+
+
 def t():
     print([(m.start()) for m in re.finditer("ab.", "abcabdabea")])
     print(np.argsort([1,1,2,1,2,3]))
