@@ -79,7 +79,40 @@ class Solution:
                         pass
 
         print(cnt, "times")
-        return dp[0][alen]
+        if K== 1:
+            return dp1[0][alen]
+        else:
+            return dp[0][alen]
+
+    def largestSumOfAverages_dp_4(self, A, K):
+        """
+        :type A: List[int]
+        :type K: int
+        :rtype: float
+        """
+        alen = len(A)
+        dp = [[-sys.maxsize-1 for j in range(alen+1)] for i in range(alen)]
+        dp1 = [[-sys.maxsize-1 for j in range(alen + 1)] for i in range(alen)]
+        # cnt=0
+
+        for i in range(0, alen):
+            for j in reversed(range(i+1, alen+1)):
+                dp1[i][j] = avg(A[i:j])
+
+        for k in range(2, K + 1):
+            i = 0
+            for j in reversed(range(i+1, alen+1)):
+                for ji in range(i+k-1,j):
+                    # cnt += 1
+                    v1 = (dp[i][ji] + dp1[ji][j]) if k > 2 else (dp1[i][ji] + dp1[ji][j])
+                    if v1 > dp[i][j]:
+                        dp[i][j] = v1
+
+        # print(cnt, "times")
+        if K == 1:
+            return dp1[0][alen]
+        else:
+            return dp[0][alen]
 
 
     def largestSumOfAverages_dp_2(self, A, K):
@@ -104,7 +137,10 @@ class Solution:
                             v1 = (dp[i][ji] + dp1[ji][j]) if k>2 else (dp1[i][ji] + dp1[ji][j])
                             if v1 > dp[i][j]:
                                 dp[i][j] = v1
-        return dp[0][alen]
+        if K == 1:
+            return dp1[0][alen]
+        else:
+            return dp[0][alen]
 
     def largestSumOfAverages_dp_maxele(self, A, K):
         """
@@ -140,7 +176,7 @@ print(-sys.maxsize-1)
 
 l1=[2192,348,3913,5028,5149,6264,248,1415,9081,1342,8624,2772,7666,2217,6123,5096,3203,98,3321,8733,7925,8869,9645,1686,2691,6267,4150,5184,401,6218,6682,5113,9758,4380,4366,4213,4226,4047,6748,4827,7158,666,3301,9753,5737,1780,2717,2180,7290,1145,3602,3569,7603,8084,64,7002,1722,9649,23,9368,3658,5002,1699,4578,7564,34,5875,3250,3803,4196,3921,7700,9682,5407,3476,595,2313,6780,3474,8304,3017,9449,2268,9525,9711,2135,5330,6653,7493,135,4153,3696,2003,3102,7982,8147,7397,2153,9405,4321]
 print(len(l1))
-K=99
+K=1
 import time
 t1 = time.time()
 solu = Solution()
@@ -153,5 +189,5 @@ t1 = time.time()
 print(solu.largestSumOfAverages_dp_3(l1, K))
 print(time.time()-t1)
 t1 = time.time()
-print(solu.largestSumOfAverages_dp_maxele(l1, K))
+print(solu.largestSumOfAverages_dp_4(l1, K))
 print(time.time()-t1)
