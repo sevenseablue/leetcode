@@ -79,9 +79,9 @@ class Solution(object):
             if root.val == key:
                 return root
             elif root.val > key:
-                root = root.right
-            else:
                 root = root.left
+            else:
+                root = root.right
         return None
 
     def findMax(self, root):
