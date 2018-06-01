@@ -6,15 +6,16 @@ import sys
 # output the square root of c to 15 decimal places of accuracy.
 # Use Newton's method.
 
-EPSILON = 1e-15
+EPSILON = 1e-8
 
 if len(sys.argv)==1:
-    c = 1e33
+    c = 100000001
 else:
     c = float(sys.argv[1])
 t = c
 while abs(t - c/t) > (EPSILON):
     # Replace t by the average of t and c/t.
     t = (c/t + t) / 2.0
+    print(t, c/t)
 print(t)
 
