@@ -1,0 +1,23 @@
+class Solution:
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        res = 0
+
+        last_price = 2**31
+        min_price = last_price
+        for price in prices:
+            if price <= last_price:
+                res += last_price - min_price
+                min_price = price
+
+            last_price = price
+        res += last_price - min_price
+        return res
+
+
+solu = Solution()
+for prices in [ [7,1,5,3,6,4], [1,2,3,4,5], [7, 6, 3, 1], [], [1], [1, 2]]:
+    print(solu.maxProfit(prices))
