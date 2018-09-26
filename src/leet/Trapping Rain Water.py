@@ -59,7 +59,7 @@ class Solution(object):
                 trap_flag[i] = True
 
         if trap_flag[0] is False:
-            raise
+            raise Exception("0 false")
 
         last_trap_ind = 0
         water = 0
@@ -70,7 +70,7 @@ class Solution(object):
                 last_trap_ind=i
 
         return water
-
+h
 def main():
     solu = Solution()
     # print(solu.trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
