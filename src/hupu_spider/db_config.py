@@ -14,7 +14,7 @@ DB_TEST_USER = "root"
 DB_TEST_PASSWORD = "wdw0126mama"
 
 # 数据库连接编码
-DB_CHARSET = "utf8"
+DB_CHARSET = "utf8mb4"
 
 # mincached : 启动时开启的闲置连接数量(缺省值 0 以为着开始时不创建连接)
 DB_MIN_CACHED = 16

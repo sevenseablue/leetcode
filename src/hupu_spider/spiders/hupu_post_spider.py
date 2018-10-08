@@ -27,7 +27,7 @@ class HupuPostSpider(scrapy.Spider):
     def parse(self, response):
         content_urls = []
         for li in response.xpath('//ul[@class="for-list"]/li'):
-            # self.log(li.extract())
+            # self.log("####%s" % li.extract())
             title_href = li.xpath(".//a[@class='truetit']/@href").extract_first()
             url = "https://bbs.hupu.com" + title_href
             post_id = self.get_post_id(title_href)
@@ -35,8 +35,12 @@ class HupuPostSpider(scrapy.Spider):
             author = li.xpath(".//a[@class='aulink']/text()").extract_first()
             post_time = li.xpath(".//a[@style='color:#808080;cursor: initial; ']/text()").extract_first()
             count_des = li.xpath(".//span[@class='ansour box']/text()").extract_first()
-            reply_count = re.match('(\d+)[^0-9]*(\d+)', count_des).group(1)
-            view_count = re.match('(\d+)[^0-9]*(\d+)', count_des).group(2)
+            m = re.match('(\d+)[^0-9]*(\d+)', count_des)
+            if m is None:
+                reply_count, view_count = 0, 0
+            else:
+                reply_count = m.group(1)
+                view_count = m.group(2)
             content_urls.append(url)
 
             yield {"id": post_id, "title": title, "url": url, "author": author, "post_time": post_time,
@@ -78,11 +82,10 @@ class HupuPostSpider(scrapy.Spider):
 
             yield {"type": 3, "content": content, "hupu_reply_id": hupu_reply_id, "author": author,
                    "hupu_post_id": post_id, "reply_time": reply_time, "like_count": like_count, "floor_num": floor_num}
-
         if total_pages > 1:
             for page in range(2, total_pages + 1):
                 url = "https://bbs.hupu.com/%s-%s.html" % (post_id, page)
-                scrapy.Request(url, self.post_content_page_parse, dont_filter=True)
+                yield scrapy.Request(url, self.post_content_page_parse, dont_filter=True)
 
         image_urls = response.xpath("//tbody//img/@src").extract()
         if len(image_urls) > 0:
@@ -94,15 +97,17 @@ class HupuPostSpider(scrapy.Spider):
             if reply.xpath("@id") is None:
                 continue
             hupu_reply_id = reply.xpath("@id").extract_first()
+            floor_num = reply.xpath(".//a[@class='floornum']/@id").extract_first()
             if hupu_reply_id == "tpc":
                 continue
             author = reply.xpath(".//div[@class='author']//a[@class='u']/text()").extract_first()
             reply_time = reply.xpath(".//div[@class='author']//span[@class='stime']/text()").extract_first()
             like_count = reply.xpath(
                 ".//div[@class='author']//span[@class='ilike_icon_list']//span[@class='stime']/text()").extract_first()
-            content = reply.xpath(".//tbody/text()").extract_first()
+            # content = reply.xpath(".//tbody/text()").extract_first()
+            content = reply.xpath(".//tbody").extract_first()
             yield {"type": 3, "content": content, "hupu_reply_id": hupu_reply_id, "author": author,
-                   "hupu_post_id": post_id, "reply_time": reply_time, "like_count": like_count}
+                   "hupu_post_id": post_id, "reply_time": reply_time, "like_count": like_count, "floor_num": floor_num}
 
     def response_retry(self, response):
         # request = response.request.copy()

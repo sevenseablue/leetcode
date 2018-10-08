@@ -47,6 +47,7 @@ class HupuSpiderPipeline(object):
             hupu_post_id = item.get("hupu_post_id")
             reply_time = item.get("reply_time")
             like_count = item.get("like_count")
+            floor_num = item.get("floor_num")
             if hupu_post_id is None or hupu_reply_id is None or reply_time is None:
                 raise DropItem("invalid item,type is %s" % item_type)
 
@@ -72,7 +73,7 @@ class HupuSpiderPipeline(object):
         if old_old is None:
             insert_sql = "insert into hupu_post(hupu_post_id,title, author, url, post_time, view_count, reply_count, gmt_created)" \
                          " values (%s,'%s','%s','%s',%s,%s,%s,%s)" \
-                         % (item.get("id"), item.get("title"), item.get("author"), item.get("url"), post_time_ms,
+                         % (item.get("id"), pymysql.escape_string(item.get("title")), item.get("author"), item.get("url"), post_time_ms,
                             item.get("view_count"), item.get("reply_count"), int(time.time()) * 1000)
 
             with pool.get_db_connect() as db:
@@ -160,6 +161,8 @@ class HupuImgDownloadPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
         if item.get("image_urls") is not None:
             for image_url in item['image_urls']:
+                if not image_url.startswith("http"):
+                    continue
                 self.default_headers['referer'] = image_url
                 yield Request(image_url, headers=self.default_headers)
         # return []
